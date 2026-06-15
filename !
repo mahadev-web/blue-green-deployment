@@ -1,0 +1,7 @@
+#!/bin/bash
+
+response=$(curl -s http://localhost:5002)
+
+echo "$response"
+
+echo "$response" | grep "Blue Green Deployment Demo"
