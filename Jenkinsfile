@@ -3,6 +3,12 @@ pipeline {
 
     stages {
 
+        stage('Checkout Code') {
+            steps {
+                checkout scm
+            }
+        }
+
         stage('Build Image') {
             steps {
                 sh 'docker build -t flask-app:new .'
