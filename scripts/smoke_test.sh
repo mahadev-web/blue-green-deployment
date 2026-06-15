@@ -1,3 +1,4 @@
 #!/bin/bash
 
-exit 1
+
+curl -f http://localhost:5002
