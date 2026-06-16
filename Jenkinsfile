@@ -3,22 +3,34 @@ pipeline {
 
     stages {
 
-        stage('Checkout Code') {
+        stage('Checkout') {
             steps {
                 checkout scm
             }
         }
 
-        stage('Build Image') {
+        stage('Detect Target') {
             steps {
-                sh 'docker build -t flask-app:new .'
+                script {
+                    TARGET = sh(
+                        script: './scripts/detect_target.sh',
+                        returnStdout: true
+                    ).trim()
+
+                    echo "Deploying to ${TARGET}"
+                }
             }
         }
 
-        stage('Deploy Green') {
+        stage('Deploy') {
             steps {
-                sh 'chmod +x scripts/*.sh'
-                sh './scripts/deploy_green.sh'
+                script {
+                    if (TARGET == "green") {
+                        sh './scripts/deploy_green.sh'
+                    } else {
+                        sh './scripts/deploy_blue.sh'
+                    }
+                }
             }
         }
 
@@ -30,20 +42,20 @@ pipeline {
 
         stage('Switch Traffic') {
             steps {
-                sh './scripts/switch_traffic.sh'
+                script {
+                    if (TARGET == "green") {
+                        sh './scripts/switch_green.sh'
+                    } else {
+                        sh './scripts/switch_blue.sh'
+                    }
+                }
             }
         }
     }
 
     post {
-
-        success {
-            echo 'Blue-Green Deployment Successful'
-        }
-
         failure {
             sh './scripts/rollback.sh'
-            echo 'Rollback Executed'
         }
     }
 }
