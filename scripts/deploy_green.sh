@@ -11,10 +11,8 @@ docker stop green-app || true
 docker rm green-app || true
 
 docker build -t flask-app:green .
-
 docker run -d \
   --name green-app \
   -p 80:5000 \
   flask-app:green
-
 EOF

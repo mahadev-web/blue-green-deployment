@@ -1,43 +1,52 @@
 from flask import Flask
+import os
 import socket
 
 app = Flask(__name__)
 
 VERSION = "v1.1"
+ENVIRONMENT = os.getenv("ENVIRONMENT", "UNKNOWN")
+
+if ENVIRONMENT == "BLUE":
+    bg_color = "#cfe2ff"
+    text_color = "#0047ab"
+elif ENVIRONMENT == "GREEN":
+    bg_color = "#d1e7dd"
+    text_color = "#198754"
+else:
+    bg_color = "#f8f9fa"
+    text_color = "#000000"
 
 @app.route('/')
 def home():
-    hostname = socket.gethostname()
-
     return f"""
     <html>
     <head>
-        <title>Blue-Green Deployment Demo</title>
+        <title>Blue Green Deployment</title>
     </head>
-
     <body style="
-        font-family: Arial, sans-serif;
-        text-align: center;
-        margin-top: 100px;
-        background-color: #f5f5f5;
-    ">
+        background-color:{bg_color};
+        text-align:center;
+        font-family:Arial;
+        padding-top:100px;">
+        
+        <h1>Blue-Green Deployment Demo</h1>
 
-        <h1 style="color: #2c3e50;">
-            Blue-Green Deployment Demo
-        </h1>
+        <h2 style="color:{text_color};">
+            Environment: {ENVIRONMENT}
+        </h2>
 
-        <h2 style="color: green;">
+        <h2 style="color:{text_color};">
             Version: {VERSION}
         </h2>
 
         <h3>
-            Server: {hostname}
+            Server: {socket.gethostname()}
         </h3>
 
         <p>
             Deployed via Jenkins + Docker + AWS ALB
         </p>
-
     </body>
     </html>
     """

@@ -11,10 +11,9 @@ docker stop blue-app || true
 docker rm blue-app || true
 
 docker build -t flask-app:blue .
-
 docker run -d \
   --name blue-app \
+  -e ENVIRONMENT=BLUE \
   -p 80:5000 \
   flask-app:blue
-
 EOF
