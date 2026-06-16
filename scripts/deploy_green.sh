@@ -1,17 +1,20 @@
 #!/bin/bash
 set -e
 
-ssh ec2-user@3.109.208.78 << 'EOF'
+ssh -o StrictHostKeyChecking=no -i ~/key.pem ec2-user@3.109.208.78 << 'EOF'
 
 cd ~/blue-green-deployment
 
-docker rm -f green-app || true
+git pull origin main
 
-docker build -t flask-app:new .
+docker stop green-app || true
+docker rm green-app || true
+
+docker build -t flask-app:green .
 
 docker run -d \
   --name green-app \
   -p 80:5000 \
-  flask-app:new
+  flask-app:green
 
 EOF
