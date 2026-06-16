@@ -7,14 +7,14 @@ cd ~/blue-green-deployment
 
 git pull origin main
 
-docker stop flask-app || true
-docker rm flask-app || true
+docker stop blue-app || true
+docker rm blue-app || true
 
-docker build -t flask-app:v3 .
+docker build -t flask-app:blue .
 
 docker run -d \
-  --name flask-app \
+  --name blue-app \
   -p 80:5000 \
-  flask-app:v3
+  flask-app:blue
 
 EOF
