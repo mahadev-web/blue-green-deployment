@@ -5,6 +5,7 @@ import socket
 app = Flask(__name__)
 
 VERSION = "v1.1"
+
 ENVIRONMENT = os.getenv("ENVIRONMENT", "UNKNOWN")
 
 if ENVIRONMENT == "BLUE":
@@ -20,16 +21,19 @@ else:
 @app.route('/')
 def home():
     return f"""
+    <!DOCTYPE html>
     <html>
     <head>
-        <title>Blue Green Deployment</title>
+        <title>Blue Green Deployment Demo</title>
     </head>
+
     <body style="
         background-color:{bg_color};
         text-align:center;
-        font-family:Arial;
-        padding-top:100px;">
-        
+        font-family:Arial,sans-serif;
+        padding-top:100px;
+    ">
+
         <h1>Blue-Green Deployment Demo</h1>
 
         <h2 style="color:{text_color};">
@@ -47,6 +51,7 @@ def home():
         <p>
             Deployed via Jenkins + Docker + AWS ALB
         </p>
+
     </body>
     </html>
     """
